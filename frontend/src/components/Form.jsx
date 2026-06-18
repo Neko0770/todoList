@@ -3,6 +3,7 @@ import api from "../api.js"
 import { useNavigate } from "react-router-dom"
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constants.js";
 import "../styles/Form.css"
+import LoadingIndicator from "./LoadingIndicator";
 
 function Form({route, method}) {
     const [username, setUsername] = useState("");
