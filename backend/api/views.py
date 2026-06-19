@@ -1,36 +1,31 @@
-from django.shortcuts import render
+from django.db.models import Q
 from django.contrib.auth.models import User
-from rest_framework import generics
-from .serializers import UserSerializer, TaskSerializer
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework import generics, permissions
+from .serializers import TaskSerializer, UserPublicSerializer
 from .models import Task
-
 
 class TaskListCreate(generics.ListCreateAPIView):
     serializer_class = TaskSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
         user = self.request.user
-        return Task.objects.filter(author=user)
+        return Task.objects.filter(Q(author=user) | Q(assigned_to=user)).distinct()
 
     def perform_create(self, serializer):
-        if serializer.is_valid():
-            serializer.save(author=self.request.user)
-        else:
-            print(serializer.errors)
+        serializer.save(author=self.request.user)
 
 
-class TaskDelete(generics.DestroyAPIView):
+class TaskDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = TaskSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
         user = self.request.user
-        return Task.objects.filter(author=user)
+        return Task.objects.filter(Q(author=user) | Q(assigned_to=user)).distinct()
 
 
-class CreateUserView(generics.CreateAPIView):
+class UserList(generics.ListAPIView):
     queryset = User.objects.all()
-    serializer_class = UserSerializer
-    permission_classes = [AllowAny]
+    serializer_class = UserPublicSerializer
+    permission_classes = [permissions.IsAuthenticated]
