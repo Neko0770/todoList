@@ -1,11 +1,11 @@
-import {useState} from 'react'
+import { useState } from 'react'
 import api from "../api.js"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, Link } from "react-router-dom"
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constants.js";
 import "../styles/Form.css"
 import LoadingIndicator from "./LoadingIndicator";
 
-function Form({route, method}) {
+function Form({ route, method }) {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
@@ -53,6 +53,16 @@ function Form({route, method}) {
             />
             {loading && <LoadingIndicator />}
             <button className="form-button" type="submit">{name}</button>
+
+            {method === "login" ? (
+                <p className="form-text-redirect">
+                    Don't have an account? <Link to="/register">Sign up here.</Link>
+                </p>
+            ) : (
+                <p className="form-text-redirect">
+                    Already have an account? <Link to="/login">Log in here.</Link>
+                </p>
+            )}
         </form>
     );
 }

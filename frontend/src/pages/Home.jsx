@@ -1,47 +1,50 @@
 import { useState, useEffect } from "react";
 import api from "../api";
-import Note from "../components/Note"
+import Task from "../components/Task.jsx"
 import "../styles/Home.css"
 
 function Home() {
-    const [notes, setNotes] = useState([]);
+    const [task, setTask] = useState([]);
     const [content, setContent] = useState("");
     const [title, setTitle] = useState("");
+    const [showForm, setShowForm] = useState(false);
 
     useEffect(() => {
-        getNotes();
+        getTask();
     }, []);
 
-    const getNotes = () => {
+    const getTask = () => {
         api
-            .get("/api/notes/")
+            .get("/api/tasks/")
             .then((res) => res.data)
             .then((data) => {
-                setNotes(data);
+                setTask(data);
                 console.log(data);
             })
             .catch((err) => alert(err));
     };
 
-    const deleteNote = (id) => {
+    const deleteTask = (id) => {
         api
-            .delete(`/api/notes/delete/${id}/`)
+            .delete(`/api/tasks/delete/${id}/`)
             .then((res) => {
-                if (res.status === 204) alert("Note deleted!");
+                if (res.status === 204) alert("Task deleted!");
                 else alert("Failed to delete note.");
-                getNotes();
+                getTask();
             })
             .catch((error) => alert(error));
     };
 
-    const createNote = (e) => {
+    const createTask = (e) => {
         e.preventDefault();
         api
             .post("/api/notes/", { content, title })
             .then((res) => {
-                if (res.status === 201) alert("Note created!");
-                else alert("Failed to make note.");
-                getNotes();
+                if (res.status === 201) alert("Task created!");
+                setTitle("");
+                setContent("");
+                setShowForm(false);
+                getTask();
             })
             .catch((err) => alert(err));
     };
@@ -49,12 +52,14 @@ function Home() {
     return <div>
         <div>
             <h2>Note</h2>
-            {notes.map((note) => (
-                <Note note={note} onDelete={deleteNote} key={note.id}/>
+            {task.map((note) => (
+                <Task note={note} onDelete={deleteTask} key={note.id}/>
             ))}
         </div>
         <h2>Create a Nore</h2>
-        <form onSubmit={createNote}>
+
+        <button className="toogle-button" onClick={() => setShowForm(!showForm)}>New task</button>
+        <form onSubmit={createTask}>
             <label htmlFor="title">Title:</label>
             <br />
             <input
@@ -74,8 +79,7 @@ function Home() {
                 onChange={(e) => setContent(e.target.value)}
             ></textarea>
             <br />
-            <input type="submit" value="s
-            Submit" />
+            <input type="submit" value="Submit" />
         </form>
     </div>
 }
