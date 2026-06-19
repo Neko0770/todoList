@@ -6,6 +6,7 @@ function Task({task, onDelete}) {
 
     return (
         <div className="task-container">
+            Si hi ha hagut cap problema, podràs presentar-te a finestreta de secretaria per resoldre'l. Igualment, si es detecta cap incidència, se t'avisarà per correu electrònic fent servir l'adreça que has indicat.
             <p className="task-title">{task.title}</p>
             <p className="task-content">{task.content}</p>
             <p className="task-date">{formattedDate}</p>

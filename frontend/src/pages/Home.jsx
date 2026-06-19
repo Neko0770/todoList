@@ -1,24 +1,23 @@
 import { useState, useEffect } from "react";
 import api from "../api";
-import Task from "../components/Task.jsx"
+import Task from "../components/Task"
 import "../styles/Home.css"
 
 function Home() {
-    const [task, setTask] = useState([]);
+    const [tasks, setTasks] = useState([]);
     const [content, setContent] = useState("");
     const [title, setTitle] = useState("");
-    const [showForm, setShowForm] = useState(false);
 
     useEffect(() => {
-        getTask();
+        getTasks();
     }, []);
 
-    const getTask = () => {
+    const getTasks = () => {
         api
             .get("/api/tasks/")
             .then((res) => res.data)
             .then((data) => {
-                setTask(data);
+                setTasks(data);
                 console.log(data);
             })
             .catch((err) => alert(err));
@@ -29,8 +28,8 @@ function Home() {
             .delete(`/api/tasks/delete/${id}/`)
             .then((res) => {
                 if (res.status === 204) alert("Task deleted!");
-                else alert("Failed to delete note.");
-                getTask();
+                else alert("Failed to delete task.");
+                getTasks();
             })
             .catch((error) => alert(error));
     };
@@ -38,27 +37,23 @@ function Home() {
     const createTask = (e) => {
         e.preventDefault();
         api
-            .post("/api/notes/", { content, title })
+            .post("/api/tasks/", { content, title })
             .then((res) => {
                 if (res.status === 201) alert("Task created!");
-                setTitle("");
-                setContent("");
-                setShowForm(false);
-                getTask();
+                else alert("Failed to create task.");
+                getTasks();
             })
             .catch((err) => alert(err));
     };
 
     return <div>
         <div>
-            <h2>Note</h2>
-            {task.map((note) => (
-                <Task note={note} onDelete={deleteTask} key={note.id}/>
+            <h2>Tasks</h2>
+            {tasks.map((task) => (
+                <Task task={task} onDelete={deleteTask} key={task.id}/>
             ))}
         </div>
-        <h2>Create a Nore</h2>
-
-        <button className="toogle-button" onClick={() => setShowForm(!showForm)}>New task</button>
+        <h2>Create a Task</h2>
         <form onSubmit={createTask}>
             <label htmlFor="title">Title:</label>
             <br />
