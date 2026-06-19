@@ -7,14 +7,10 @@ function Home() {
     const [tasks, setTasks] = useState([]);
     const [content, setContent] = useState("");
     const [title, setTitle] = useState("");
-
-    // Estados para los nuevos parámetros
     const [dueDate, setDueDate] = useState("");
     const [assignedTo, setAssignedTo] = useState("");
     const [urgent, setUrgent] = useState(false);
     const [users, setUsers] = useState([]);
-
-    // Estado para controlar el "IF" de visualización del formulario
     const [showForm, setShowForm] = useState(false);
 
     useEffect(() => {
@@ -97,7 +93,6 @@ function Home() {
                 ))}
             </div>
 
-            {/* Botón dinámico para mostrar/ocultar el formulario */}
             <button
                 onClick={() => setShowForm(!showForm)}
                 style={{
@@ -114,7 +109,6 @@ function Home() {
                 {showForm ? "Cancel" : "Create a Task"}
             </button>
 
-            {/* Renderizado condicional del formulario (El "IF" de React) */}
             {showForm && (
                 <form onSubmit={createTask}>
                     <h2>Create a Task</h2>
