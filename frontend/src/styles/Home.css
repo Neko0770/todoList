@@ -43,8 +43,7 @@ form label {
     margin-top: 10px;
 }
 
-form input,
-form textarea {
+form input, form textarea {
     width: 100%;
     padding: 8px;
     margin: 8px 0 16px;
@@ -61,6 +60,50 @@ form input[type="submit"] {
     border-radius: 4px;
     cursor: pointer;
     font-size: 16px;
+}
+
+#extra-cointainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 15px;
+    margin-bottom: 25px;
+    background-color: #fff;
+}
+
+#extra-cointainer .parts {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+}
+
+.extra-label {
+    font-size: 14px;
+}
+
+#assigned-to, #date-limit {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+    font-size: 0.9rem;
+    outline: none;
+}
+
+#extra-cointainer .parts:has(#urgent) {
+    align-items: center;
+    justify-content: center;
+    flex-direction: row-reverse;
+    gap: 8px;
+    height: 38px;
+}
+
+#urgent {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    margin: 0;
 }
 
 form input[type="submit"]:hover {

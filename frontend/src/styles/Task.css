@@ -56,3 +56,38 @@
   border-radius: 4px;
   cursor: pointer;
 }
+
+.task-completed {
+    border-left: 6px solid #2e7d32 !important;
+    background-color: #e8f5e9 !important;
+    opacity: 0.75;
+}
+
+.task-overdue {
+    border-left: 6px solid #c62828 !important;
+    background-color: #ffebee !important;
+}
+
+
+.urgent-badge {
+    background-color: #ff9800;
+    color: white;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    margin-left: 10px;
+    display: inline-block;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.task-metadata {
+    font-size: 0.85rem;
+    color: #666;
+    margin: 5px 0;
+}
+
+.task-metadata strong {
+    color: #444;
+}
