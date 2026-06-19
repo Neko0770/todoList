@@ -7,6 +7,7 @@ function Home() {
     const [tasks, setTasks] = useState([]);
     const [content, setContent] = useState("");
     const [title, setTitle] = useState("");
+    const [showForm, setShowForm] = useState(false);
 
     useEffect(() => {
         getTasks();
@@ -46,37 +47,49 @@ function Home() {
             .catch((err) => alert(err));
     };
 
-    return <div>
+    return (
         <div>
-            <h2>Tasks</h2>
-            {tasks.map((task) => (
-                <Task task={task} onDelete={deleteTask} key={task.id}/>
-            ))}
+            <div>
+                <h2>Tasks</h2>
+                <button className="create-task" onClick={() => setShowForm(!showForm)}>
+                    {showForm ? "Cancel" : "Create a Task"}
+                </button>
+                <div id="Tasks-container">
+                    {tasks.map((task) => (
+                        <Task task={task} onDelete={deleteTask} key={task.id}/>
+                    ))}
+                </div>
+
+            </div>
+
+            {showForm && (
+                <form onSubmit={createTask}>
+                    <h2>Create a Task</h2>
+                    <label htmlFor="title">Title:</label>
+                    <br />
+                    <input
+                        type="text"
+                        id="title"
+                        name="title"
+                        required
+                        onChange={(e) => setTitle(e.target.value)}
+                        value={title}
+                    />
+                    <label htmlFor="content">Content:</label>
+                    <br />
+                    <textarea
+                        id="content"
+                        name="content"
+                        value={content}
+                        onChange={(e) => setContent(e.target.value)}
+                    ></textarea>
+                    <br />
+                    <input type="submit" value="Submit" />
+                </form>
+            )}
+
         </div>
-        <h2>Create a Task</h2>
-        <form onSubmit={createTask}>
-            <label htmlFor="title">Title:</label>
-            <br />
-            <input
-                type="text"
-                id="title"
-                name="title"
-                required
-                onChange={(e) => setTitle(e.target.value)}
-                value={title}
-            />
-            <label htmlFor="content">Content:</label>
-            <br />
-            <textarea
-                id="content"
-                name="content"
-                value={content}
-                onChange={(e) => setContent(e.target.value)}
-            ></textarea>
-            <br />
-            <input type="submit" value="Submit" />
-        </form>
-    </div>
+    );
 }
 
 export default Home

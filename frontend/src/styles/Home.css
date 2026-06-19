@@ -3,6 +3,23 @@ div {
     font-family: Arial, sans-serif;
 }
 
+#Tasks-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+}
+
+.create-task {
+    background-color: #2563eb;
+    color: white;
+    width: 130px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
 /* Styles for the tasks section */
 .tasks-section {
     margin-bottom: 2rem;
@@ -24,12 +41,17 @@ div {
 
 /* Styles for the form section */
 form {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     background-color: #fff;
     padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    width: 100%;
     max-width: 500px;
-    margin: auto;
+    z-index: 1000;
 }
 
 form h2 {
