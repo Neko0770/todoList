@@ -1,10 +1,16 @@
-FROM python:3.11-slim
+FROM python:3.10-slim
+
+# Evita que Python escriba archivos .pyc y almacene en búfer las salidas
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
 
 WORKDIR /app
 
-COPY requirements.txt .
+# Copiar e instalar las dependencias de Python
+COPY requirements.txt /app/
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY . .
+# Copiar todo el código del backend al contenedor
+COPY . /app/
 
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+EXPOSE 8000

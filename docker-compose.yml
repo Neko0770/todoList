@@ -1,33 +1,54 @@
 services:
-  postgres_db:
-    image: postgres:18-alpine
-    container_name: mi_postgres_18
-    restart: always
+  db:
+    image: postgres:18
+    container_name: django_react_db
     environment:
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: admin
-      POSTGRES_DB: todolist_db
+      POSTGRES_DB: default_db
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
     ports:
       - "5432:5432"
     volumes:
-      - pg18_data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql  # <-- Corregido para Postgres 18+
+    healthcheck:                           # <-- Asegura que la BD esté lista antes de que Django arranque
+      test: ["CMD-SHELL", "pg_isready -U myuser -d default_db"]
+      interval: 3s
+      timeout: 3s
+      retries: 5
 
-  django_backend:
+  backend:
     build: ./backend
-    container_name: mi_django_backend
-    command: python manage.py runserver 0.0.0.0:8000
+    container_name: django_backend
+    command: >
+      sh -c "python manage.py migrate &&
+             python manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - ./backend:/app
     ports:
       - "8000:8000"
     environment:
-      DB_HOST: postgres_db
-      DB_PORT: 5432
-      POSTGRES_DB: todolist_db
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: admin
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_USER=myuser
+      - DB_NAME=default_db
+      - DB_PWD=mypassword
     depends_on:
-      - postgres_db
+      db:
+        condition: service_healthy       # <-- Espera al healthcheck del contenedor 'db'
+
+  frontend:
+    build: ./frontend
+    container_name: react_frontend
+    command: npm run dev -- --host
     volumes:
-      - ./backend:/app
+      - ./frontend:/app
+      - /app/node_modules
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_URL=http://localhost:8000
+    depends_on:
+      - backend
 
 volumes:
-  pg18_data:
+  postgres_data:
