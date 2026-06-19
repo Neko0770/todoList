@@ -1,7 +1,8 @@
 from django.db.models import Q
 from django.contrib.auth.models import User
 from rest_framework import generics, permissions
-from .serializers import TaskSerializer, UserPublicSerializer
+from rest_framework.permissions import AllowAny
+from .serializers import TaskSerializer, UserSerializer, UserPublicSerializer
 from .models import Task
 
 class TaskListCreate(generics.ListCreateAPIView):
@@ -15,6 +16,10 @@ class TaskListCreate(generics.ListCreateAPIView):
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
 
+class CreateUserView(generics.CreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [AllowAny]
 
 class TaskDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = TaskSerializer
