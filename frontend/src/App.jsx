@@ -1,8 +1,8 @@
-import react from "react"
+import React from "react"
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom"
 import Login from "./pages/Login.jsx"
 import Register from "./pages/Register.jsx"
-import NotFount from "./pages/NotFound.jsx"
+import NotFound from "./pages/NotFound.jsx"
 import Home from "./pages/Home.jsx"
 import ProtectedRoute from "./components/ProtectedRoute.jsx"
 
@@ -33,7 +33,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/logout" element={<Logout />} />
         <Route path="/register" element={<RegisterAndLogout />} />
-        <Route path="*" element={<NotFount />}></Route>
+        <Route path="*" element={<NotFound />}></Route>
       </Routes>
     </BrowserRouter>
   )
